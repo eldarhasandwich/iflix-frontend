@@ -1,31 +1,35 @@
 import React, {Component} from 'react';
 import {connect} from 'react-redux'
 
-import * as pjson from '../../../package.json'
+import RatingModal from '../RatingModal/RatingModal';
 
 class App extends Component {
+
+    constructor(props) {
+        super(props)
+
+        this.state = {
+            ratingModalOpen: false
+        }
+    }
+
+    toggleModal = () => {
+        this.setState({ratingModalOpen: !this.state.ratingModalOpen})
+    }
+
     render() {
         return (
             <div>
-                <h1
-                    style={{textAlign:"center", marginBottom:"2px"}}
-                >
-                    <code>
-                        react-redux-boilerplate
-                    </code>
-                </h1>
 
-                <p
-                    style={{textAlign:"center", marginTop:"2px"}}
+                <button
+                    onClick={this.toggleModal}
                 >
-                    <code>@{pjson.version}</code>
-                </p>
+                    Toggle Modal
+                </button>
 
-                <p
-                    style={{textAlign:"center"}}
-                >
-                    If you're seeing this, everything is working!
-                </p>
+                <RatingModal
+                    isOpen={this.state.ratingModalOpen}
+                />
             </div>
         );
     }
