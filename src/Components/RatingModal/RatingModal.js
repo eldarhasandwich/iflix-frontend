@@ -35,15 +35,7 @@ class RatingModal extends Component {
 
     render() {
         if (!this.props.isOpen) {
-            return (
-                <h1
-                    style={{
-                        textAlign: "center"
-                    }}
-                >
-                    Not Open
-                </h1>
-            )
+            return null
         }
 
         return (
@@ -51,7 +43,10 @@ class RatingModal extends Component {
                 style={{
                     border: "solid 1px black",
                     width:"400px",
-                    margin:"0 auto"
+                    position:"absolute",
+                    left:"calc(50% - 200px)",
+                    top:"50px",
+                    backgroundColor:"white"
                 }}
             >
                 
