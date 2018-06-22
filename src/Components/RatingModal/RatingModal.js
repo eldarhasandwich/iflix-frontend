@@ -1,14 +1,15 @@
 import React, {Component} from 'react';
 import {connect} from 'react-redux'
 
+import * as StateActions from '../../Actions/state'
+
 class RatingModal extends Component {
 
     constructor(props) {
         super(props)
 
         this.state = {
-            mouseOver: 0,
-            ratingSent: false
+            mouseOver: 0
         }
     }
 
@@ -17,14 +18,15 @@ class RatingModal extends Component {
     }
 
     sendStarRating = rating => {
-        this.setState({ratingSent: true})
-        alert(rating + " stars!")
+        console.log("posting a " + rating)
+        this.props.postUserRating(1234, 1234, rating)
     }
 
     generateRatingStars = () => {
         return [1,2,3,4,5].map(i => {
             return (
                 <RatingStar
+                    key={i}
                     filled={this.state.mouseOver > i-1}
                     onMouseOver={this.setNStars.bind(this, i)}
                     onClick={this.sendStarRating.bind(this, i)}
@@ -102,7 +104,9 @@ const mapStateToProps = state => {
 }
 
 const mapDispatchToProps = dispatch => {
-    return {}
+    return {
+        postUserRating: (userId, contentId, rating) => dispatch(StateActions.postUserRating(userId, contentId, rating)) 
+    }
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(RatingModal)

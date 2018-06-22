@@ -1,12 +1,13 @@
 const defaultState = {
-
+    contentRating: null
 }
 
 const state = (state = defaultState, action) => {
     switch (action.type) {
-        case 'EXAMPLE_ACTION': {
+        case 'PULL_CONTENT_RATING': {
             return {
-                ...state
+                ...state,
+                contentRating: action.contentRating
             }
         }
 
