@@ -7,42 +7,72 @@ class RatingModal extends Component {
         super(props)
 
         this.state = {
-            mouseOver: 0
+            mouseOver: 0,
+            ratingSent: false
         }
     }
 
-    mouseOver = nStars => {
+    setNStars = nStars => {
         this.setState({mouseOver: nStars})
+    }
+
+    sendStarRating = rating => {
+        this.setState({ratingSent: true})
+        alert(rating + " stars!")
+    }
+
+    generateRatingStars = () => {
+        return [1,2,3,4,5].map(i => {
+            return (
+                <RatingStar
+                    filled={this.state.mouseOver > i-1}
+                    onMouseOver={this.setNStars.bind(this, i)}
+                    onClick={this.sendStarRating.bind(this, i)}
+                />
+            )
+        })
     }
 
     render() {
         if (!this.props.isOpen) {
-            return (<h1>Not Open</h1>)
+            return (
+                <h1
+                    style={{
+                        textAlign: "center"
+                    }}
+                >
+                    Not Open
+                </h1>
+            )
         }
 
         return (
-            <div>
-
-                <RatingStar
-                    filled={this.state.mouseOver < 0}
-                    onMouseOver={this.mouseOver.bind(this, 0)}
-                />
-                <RatingStar
-                    filled={this.state.mouseOver < 1}
-                    onMouseOver={this.mouseOver.bind(this, 1)}
-                />
-                <RatingStar
-                    filled={this.state.mouseOver < 2}
-                    onMouseOver={this.mouseOver.bind(this, 2)}
-                />
-                <RatingStar
-                    filled={this.state.mouseOver < 3}
-                    onMouseOver={this.mouseOver.bind(this, 3)}
-                />
-                <RatingStar
-                    filled={this.state.mouseOver < 4}
-                    onMouseOver={this.mouseOver.bind(this, 4)}
-                />
+            <div
+                style={{
+                    border: "solid 1px black",
+                    width:"400px",
+                    margin:"0 auto"
+                }}
+            >
+                
+                <p
+                    style={{
+                        textAlign: "center"
+                    }}
+                >
+                    Tell us how much you enjoyed this show!
+                </p>
+            
+                <div
+                    style={{
+                        width:"175px",
+                        margin: "15px auto",
+                    }}
+                    onMouseLeave={this.setNStars.bind(this, 0)}
+                >
+                    { this.generateRatingStars() }
+                </div>
+                
             </div>
         );
     }
@@ -51,15 +81,23 @@ class RatingModal extends Component {
 class RatingStar extends Component {
     render() {
         return (
-            <div
+            <h1
+                style={{
+                    width: "35px",
+                    display: "inline-block",
+                    cursor: "pointer",
+                    margin:"0",
+                    textAlign:"center"
+                }}
                 onMouseOver={this.props.onMouseOver}
+                onClick={this.props.onClick}
             >
                 {
                     this.props.filled
-                        ? <h1>X</h1>
-                        : <h1>O</h1>
+                        ? "X"
+                        : "O"
                 }
-            </div>
+            </h1>
         );
     }
 }
