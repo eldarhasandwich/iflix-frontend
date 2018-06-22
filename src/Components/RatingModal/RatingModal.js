@@ -35,22 +35,46 @@ class RatingModal extends Component {
         })
     }
 
+    modalStyle = {
+        border: "solid 1px black",
+        width:"500px",
+        position:"absolute",
+        left:"calc(50% - 200px)",
+        top:"50px",
+        backgroundColor:"white"
+    }
+
     render() {
         if (!this.props.isOpen) {
             return null
         }
 
+        if (this.props.state.contentRating) {
+            return (
+                <div style={this.modalStyle}>
+
+                    <p
+                        style={{
+                            textAlign: "center"
+                        }}
+                    >
+                        Thanks for your input. It will help us cater our content to you.
+                    </p>
+
+                    <p
+                        style={{
+                            textAlign: "center"
+                        }}
+                    >
+                        This show has an average score of {this.props.state.contentRating.average} stars.
+                    </p>
+
+                </div>
+            )
+        }
+
         return (
-            <div
-                style={{
-                    border: "solid 1px black",
-                    width:"400px",
-                    position:"absolute",
-                    left:"calc(50% - 200px)",
-                    top:"50px",
-                    backgroundColor:"white"
-                }}
-            >
+            <div style={this.modalStyle}>
                 
                 <p
                     style={{
@@ -100,7 +124,7 @@ class RatingStar extends Component {
 }
 
 const mapStateToProps = state => {
-    return {}
+    return {state: state.state}
 }
 
 const mapDispatchToProps = dispatch => {

@@ -12,8 +12,8 @@ export function retrieveRating (contentId) {
 
                 } else {
                     dispatch({
-                        type: "PULL_CONTENT_RATING", 
-                        rating: res
+                        type: "UPDATE_CONTENT_RATING", 
+                        contentRating: res.body
                     })
                 }
             })
@@ -35,7 +35,7 @@ export function postUserRating (_userId, _contentId, _rating) {
                 if (!res) {
 
                 } else {
-
+                    dispatch(retrieveRating(_contentId))
                 }
             })
 
