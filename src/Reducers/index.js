@@ -1,9 +1,9 @@
 import { combineReducers } from 'redux'
 
-import state from './state'
+import contentRating from './contentRating'
 
 const rootReducer = combineReducers({
-  state
+  contentRating
 })
 
 export default rootReducer

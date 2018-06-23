@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
 import {connect} from 'react-redux'
 
-import * as StateActions from '../../Actions/state'
+import * as ContentRatingActions from '../../Actions/contentRating'
 import Modal from './Modal';
 
 class RatingModal extends Component {
@@ -45,7 +45,33 @@ class RatingModal extends Component {
             return null
         }
 
-        if (this.props.state.contentRating) {
+        if (this.props.contentRating.awaitingResponse) {
+            return (
+                <Modal
+                    isOpen={this.props.isOpen}
+                    width={500}
+                >
+                    <p style={this.pStyle}>
+                        Sending...
+                    </p>
+                </Modal>
+            )
+        }
+
+        if (this.props.contentRating.postFailed) {
+            return (
+                <Modal
+                    isOpen={this.props.isOpen}
+                    width={500}
+                >
+                    <p style={this.pStyle}>
+                        We couldn't receive your rating, please try again later.
+                    </p>
+                </Modal>
+            )
+        }
+
+        if (this.props.contentRating.contentRating) {
             return (
                 <Modal
                     isOpen={this.props.isOpen}
@@ -56,7 +82,7 @@ class RatingModal extends Component {
                     </p>
 
                     <p style={this.pStyle}>
-                        This show has an average score of {this.props.state.contentRating.average} stars.
+                        This show has an average score of {this.props.contentRating.contentRating.average} stars.
                     </p>
                 </Modal>
             )
@@ -112,12 +138,12 @@ class RatingStar extends Component {
 }
 
 const mapStateToProps = state => {
-    return {state: state.state}
+    return {contentRating: state.contentRating}
 }
 
 const mapDispatchToProps = dispatch => {
     return {
-        postUserRating: (userId, contentId, rating) => dispatch(StateActions.postUserRating(userId, contentId, rating)) 
+        postUserRating: (userId, contentId, rating) => dispatch(ContentRatingActions.postUserRating(userId, contentId, rating)) 
     }
 }
 
