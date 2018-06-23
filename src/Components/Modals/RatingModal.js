@@ -2,6 +2,7 @@ import React, {Component} from 'react';
 import {connect} from 'react-redux'
 
 import * as StateActions from '../../Actions/state'
+import Modal from './Modal';
 
 class RatingModal extends Component {
 
@@ -35,13 +36,8 @@ class RatingModal extends Component {
         })
     }
 
-    modalStyle = {
-        border: "solid 1px black",
-        width:"500px",
-        position:"absolute",
-        left:"calc(50% - 200px)",
-        top:"50px",
-        backgroundColor:"white"
+    pStyle = {
+        textAlign:"center"
     }
 
     render() {
@@ -51,36 +47,28 @@ class RatingModal extends Component {
 
         if (this.props.state.contentRating) {
             return (
-                <div style={this.modalStyle}>
-
-                    <p
-                        style={{
-                            textAlign: "center"
-                        }}
-                    >
+                <Modal
+                    isOpen={this.props.isOpen}
+                    width={500}
+                >
+                    <p style={this.pStyle}>
                         Thanks for your input. It will help us cater our content to you.
                     </p>
 
-                    <p
-                        style={{
-                            textAlign: "center"
-                        }}
-                    >
+                    <p style={this.pStyle}>
                         This show has an average score of {this.props.state.contentRating.average} stars.
                     </p>
-
-                </div>
+                </Modal>
             )
         }
 
         return (
-            <div style={this.modalStyle}>
+            <Modal
+                isOpen={this.props.isOpen}
+                width={500}
+            >
                 
-                <p
-                    style={{
-                        textAlign: "center"
-                    }}
-                >
+                <p style={this.pStyle}>
                     Tell us how much you enjoyed this show!
                 </p>
             
@@ -94,7 +82,7 @@ class RatingModal extends Component {
                     { this.generateRatingStars() }
                 </div>
                 
-            </div>
+            </Modal>
         );
     }
 }

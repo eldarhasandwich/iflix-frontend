@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
 import {connect} from 'react-redux'
 
-import RatingModal from '../RatingModal/RatingModal';
+import RatingModal from '../Modals/RatingModal';
 
 class App extends Component {
 
