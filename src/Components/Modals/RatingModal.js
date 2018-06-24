@@ -20,7 +20,7 @@ class RatingModal extends Component {
 
     sendStarRating = rating => {
         console.log("posting a " + rating)
-        this.props.postUserRating(1234, 1234, rating)
+        this.props.postUserRating(1, 1, rating)
     }
 
     generateRatingStars = () => {
@@ -41,10 +41,7 @@ class RatingModal extends Component {
     }
 
     render() {
-        if (!this.props.isOpen) {
-            return null
-        }
-
+        
         if (this.props.contentRating.awaitingResponse) {
             return (
                 <Modal

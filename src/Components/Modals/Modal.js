@@ -8,7 +8,7 @@ class Modal extends Component {
         width: `${this.props.width}px`,
         position: "absolute",
         left: `calc(50% - ${(this.props.width)/2}px)`,
-        top: "50px",
+        top: "40vh",
         backgroundColor: "white"
     }
 

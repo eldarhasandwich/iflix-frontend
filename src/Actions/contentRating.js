@@ -29,10 +29,13 @@ export function retrieveRating (contentId) {
             .get(config.api + "/rating/" + contentId)
             .then(function(res) {
                 if (!res) {
-
+                    ///
                 } else {
                     dispatch(setContentRating(res.body))
                 }
+            })
+            .catch(function(err) {
+                ///
             })
 
     }
@@ -48,17 +51,19 @@ export function postUserRating (_userId, _contentId, _rating) {
                 contentId: _contentId,
                 rating: _rating
             })
-            .then(function(res) {
+            .timeout({
+                response: 5000
+            })
+            .then(res => {
                 dispatch(setAwaitingResponse(false))
-                if (!res) {
+                if (!res || res.response !== "success") {
                     dispatch(setPostFailed())
                 } else {
                     dispatch(retrieveRating(_contentId))
                 }
-            })
-            .catch(function(err) {
+            }, err => {
                 dispatch(setAwaitingResponse(false))
-                dispatch(setPostFailed())
+                dispatch(setPostFailed())                
             })
 
     }
