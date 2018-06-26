@@ -19,12 +19,15 @@ class RatingModal extends Component {
     }
 
     sendStarRating = rating => {
-        console.log("posting a " + rating)
-        this.props.postUserRating(1, 1, rating)
+        let userId = this.props.userSession.userId
+        let contentId = this.props.userSession.selectedContentId
 
+        console.log("posting a " + rating)
+        this.props.postUserRating(userId, contentId, rating)
+        this.setState({mouseOver: 0})
     }
 
-    generateRatingStars = () => {
+    generateRatingStars = () => { 
         return [1,2,3,4,5].map(i => {
             return (
                 <RatingStar
@@ -43,7 +46,7 @@ class RatingModal extends Component {
 
     render() {
         
-        if (this.props.contentRating.awaitingResponse) {
+        if (this.props.contentRating.awaitingResponse) { // Displayed while waiting for server response
             return (
                 <Modal
                     isOpen={this.props.isOpen}
@@ -56,7 +59,7 @@ class RatingModal extends Component {
             )
         }
 
-        if (this.props.contentRating.postFailed) {
+        if (this.props.contentRating.postOutcome === "fail") { // Displayed when rating request has failed
             return (
                 <Modal
                     isOpen={this.props.isOpen}
@@ -69,7 +72,7 @@ class RatingModal extends Component {
             )
         }
 
-        if (this.props.contentRating.contentRating) {
+        if (this.props.contentRating.postOutcome === "pass") { // Displayed when rating request was successful
             return (
                 <Modal
                     isOpen={this.props.isOpen}
@@ -80,13 +83,17 @@ class RatingModal extends Component {
                     </p>
 
                     <p style={this.pStyle}>
-                        This show has an average score of {this.props.contentRating.contentRating.average} stars.
+                        This show has an average score of {
+                            this.props.userSession.content.find(e => {
+                                return e.contentId === this.props.userSession.selectedContentId
+                            }).average.toFixed(1)
+                        } stars.
                     </p>
                 </Modal>
             )
         }
 
-        return (
+        return ( // Base state, prompt for user input (rating)
             <Modal
                 isOpen={this.props.isOpen}
                 width={500}
@@ -136,7 +143,7 @@ class RatingStar extends Component {
 }
 
 const mapStateToProps = state => {
-    return {contentRating: state.contentRating}
+    return {userSession: state.userSession, contentRating: state.contentRating}
 }
 
 const mapDispatchToProps = dispatch => {

@@ -1,8 +1,8 @@
 const defaultState = {
     ratingModalOpen: false,
     awaitingResponse: false,
-    contentRating: null,
-    postFailed: false
+    // contentRating: null,
+    postOutcome: null
 }
 
 const state = (state = defaultState, action) => {
@@ -14,12 +14,12 @@ const state = (state = defaultState, action) => {
             }
         }
 
-        case 'SET_CONTENT_RATING': {
-            return {
-                ...state,
-                contentRating: action.contentRating
-            }
-        }
+        // case 'SET_CONTENT_RATING': {
+        //     return {
+        //         ...state,
+        //         contentRating: action.contentRating
+        //     }
+        // }
 
         case 'SET_AWAITING_RESPONSE': {
             return {
@@ -28,10 +28,10 @@ const state = (state = defaultState, action) => {
             }
         }
 
-        case 'SET_POST_FAILED': {
+        case 'SET_POST_OUTCOME': {
             return {
                 ...state,
-                postFailed: action.value
+                postOutcome: action.value
             }
         }
 

@@ -5,6 +5,8 @@ import RatingModal from '../Modals/RatingModal';
 import LoginModal from '../Modals/LoginModal';
 
 import * as ContentRatingActions from '../../Actions/contentRating'
+import * as UserSessionActions from '../../Actions/userSession'
+// import { Z_VERSION_ERROR } from 'zlib';
 
 class App extends Component {
 
@@ -24,36 +26,93 @@ class App extends Component {
         this.props.setRatingModalOpen(value)
     }
 
+    setSelectedContent = contentId => {
+        this.props.setSelectedContent(contentId)
+    }
+
     generateContent = () => {
         let content = this.props.userSession.content
         if (!content) { console.log("no content"); return null }
-        return content.map(c => {
+        return content.map((c, index) => {
             return (
                 <Content
                     key={c.title}
                     title={c.title}
                     averageRating={c.average}
-                    onClick={this.setRatingModalOpen.bind(this, true)}
+                    onClick={this.setSelectedContent.bind(this, c.contentId)}
                 />
             )
         })
+    }
 
+    closeContent = () => {
+        this.setSelectedContent(null)
+        this.setRatingModalOpen(false)
+        this.props.resetContentRating()
     }
 
     render() {
-        return (
+
+        if (!this.props.userSession.isLoggedIn) { // display login UI
+            return (
+                <div>
+                    <button
+                        onClick={this.setLoginModalOpen.bind(this, !this.state.loginModalOpen)}
+                    >
+                        Toggle Login Modal
+                    </button>
+
+                    
+                    <LoginModal
+                        isOpen={this.state.loginModalOpen}
+                        onRequestClose={this.setLoginModalOpen.bind(this, false)}
+                    />
+                </div>
+            )
+
+        }
+
+        if (this.props.userSession.selectedContentId != null) { // must compare to null as contentId can equal 0
+            return (
+                <div>
+
+                    <button
+                        onClick={this.closeContent}
+                    >
+                        Back
+                    </button>
+
+                    <h1>
+                        {
+                            this.props.userSession.content.find(e => {
+                                return e.contentId === this.props.userSession.selectedContentId
+                            }).title
+                        }
+                    </h1>
+
+                    <RatingModal
+                        isOpen={this.props.contentRating.ratingModalOpen}
+                        onRequestClose={this.setRatingModalOpen.bind(this, false)}
+                    />
+
+                    <button
+                        onClick={this.setRatingModalOpen.bind(this, true)}
+                    >
+                        Open Rating Modal
+                    </button>
+                    
+                </div>
+            )
+        }
+
+        return ( // Display when user is logged in and has not selected any content to view
             <div>
 
                 <button
-                    onClick={this.setLoginModalOpen.bind(this, !this.state.loginModalOpen)}
+                    onClick={this.props.logOut}
                 >
-                    Toggle Login Modal
+                    Log Out
                 </button>
-
-                <LoginModal
-                    isOpen={this.state.loginModalOpen}
-                    onRequestClose={this.setLoginModalOpen.bind(this, false)}
-                />
 
                 <RatingModal
                     isOpen={this.props.contentRating.ratingModalOpen}
@@ -66,13 +125,7 @@ class App extends Component {
                         margin:"0 auto"
                     }}
                 >
-                    <h1 style={{textAlign:"center"}}>
-                        {
-                            (this.props.userSession.isLoggedIn)
-                                ? "Here is some content"
-                                : "Please Log in"
-                        }
-                    </h1>
+                    <h1 style={{textAlign:"center"}}>Here is some content</h1>
 
                     {
                         this.generateContent()
@@ -131,7 +184,7 @@ class Content extends Component {
                         paddingRight:"10px"
                     }}
                 >
-                    Community Rating: {this.props.averageRating}/5 stars
+                    Community Rating: {this.props.averageRating.toFixed(1)}/5 stars
                 </p>
             </div>
         )
@@ -144,7 +197,10 @@ const mapStateToProps = state => {
 
 const mapDispatchToProps = dispatch => {
     return {
-        setRatingModalOpen: isOpen => dispatch(ContentRatingActions.setRatingModalOpen(isOpen))
+        setRatingModalOpen: isOpen => dispatch(ContentRatingActions.setRatingModalOpen(isOpen)),
+        setSelectedContent: id => dispatch(UserSessionActions.setSelectedContent(id)),
+        resetContentRating: () => dispatch(ContentRatingActions.setPostOutcome(null)),
+        logOut: () => dispatch(UserSessionActions.logOut())
     }
 }
 

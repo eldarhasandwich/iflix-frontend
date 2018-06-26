@@ -2,6 +2,12 @@
 import * as request from 'superagent'
 import config from '../config'
 
+export function logOut () {
+    return {
+        type: "SET_USER_LOGGED_OUT"
+    }
+}
+
 export function setLogin (wasSuccessful, userId = null) {
     return {
         type: "SET_USER_LOGGED_IN", 
@@ -9,6 +15,21 @@ export function setLogin (wasSuccessful, userId = null) {
         userId
     }
 }
+
+export function updateContentAverageRating (contentId, newAverage) {
+    return {
+        type: "UPDATE_CONTENT_RATING",
+        contentId,
+        newAverage
+    }
+}
+
+export function setSelectedContent (contentId) {
+    return {
+        type: "SET_SELECTED_CONTENT",
+        contentId
+    }
+} 
 
 export function setContent (content) {
     return {
@@ -48,7 +69,7 @@ export function retrieveContent () {
         request
             .get(config.api + "/content")
             .then(res => {
-                console.log(res.body)
+                // console.log(res.body)
                 if (!res) {
                     ///
                 } else {

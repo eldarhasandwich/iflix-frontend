@@ -2,6 +2,8 @@
 import * as request from 'superagent'
 import config from '../config'
 
+import * as UserSessionActions from './userSession'
+
 export function setRatingModalOpen (isOpen) {
     return {
         type: "SET_RATING_MODAL_OPEN", 
@@ -9,16 +11,16 @@ export function setRatingModalOpen (isOpen) {
     }
 }
 
-export function setContentRating (contentRating) {
-    return {
-        type: "SET_CONTENT_RATING", 
-        contentRating: contentRating
-    }
-}
+// export function setContentRating (contentRating) {
+//     return {
+//         type: "SET_CONTENT_RATING", 
+//         contentRating: contentRating
+//     }
+// }
 
-export function setPostFailed (value) {
+export function setPostOutcome (value) {
     return {
-        type:"SET_POST_FAILED",
+        type:"SET_POST_OUTCOME",
         value
     }
 }
@@ -37,9 +39,10 @@ export function retrieveRating (contentId) {
             .get(config.api + "/rating/" + contentId)
             .then(function(res) {
                 if (!res) {
-                    ///
+                    console.log("cant get average rating??")
                 } else {
-                    dispatch(setContentRating(res.body))
+                    console.log(res)
+                    dispatch(UserSessionActions.updateContentAverageRating(contentId, res.body.rating))
                 }
             })
             .catch(function(err) {
@@ -59,24 +62,24 @@ export function postUserRating (_userId, _contentId, _rating) {
                 contentId: _contentId,
                 rating: _rating
             })
-            .timeout({
+            .timeout({ // If server takes more than 5s to respond, timeout
                 response: 5000
             })
             .then(res => {
                 dispatch(setAwaitingResponse(false))
-                console.log(res)
-                if (!res || res.body.response !== "success") {
-                    dispatch(setPostFailed(true))
-                } else {
+                if (!res || res.body.response !== "success") { // if post failed, display false outcome
+                    dispatch(setPostOutcome("fail"))
+                } else { // if successful, display true outcome
                     dispatch(retrieveRating(_contentId))
+                    dispatch(setPostOutcome("pass"))
                 }
-                setTimeout(function() { 
+                setTimeout(function() { // after 3s, close the modal
                     dispatch(setRatingModalOpen(false))
-                    dispatch(setPostFailed(false))
+                    dispatch(setPostOutcome(null))
                 }, 3000)
-            }, err => {
+            }, err => { 
                 dispatch(setAwaitingResponse(false))
-                dispatch(setPostFailed(true))                
+                dispatch(setPostOutcome("fail"))                
             })
 
     }
