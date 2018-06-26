@@ -28,7 +28,7 @@ export function attemptLogin (userId) {
     return (dispatch, getState) => {
         request
             .get(config.api + "/login/" + userId)
-            .then(function(res) {
+            .then(res => {
                 if (res.body.response !== "success") {
                     dispatch(setLogin(false))
                 } else {
@@ -47,7 +47,7 @@ export function retrieveContent () {
 
         request
             .get(config.api + "/content")
-            .then(function(res) {
+            .then(res => {
                 console.log(res.body)
                 if (!res) {
                     ///

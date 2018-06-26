@@ -21,6 +21,7 @@ class RatingModal extends Component {
     sendStarRating = rating => {
         console.log("posting a " + rating)
         this.props.postUserRating(1, 1, rating)
+
     }
 
     generateRatingStars = () => {

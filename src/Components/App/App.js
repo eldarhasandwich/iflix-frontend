@@ -4,6 +4,8 @@ import {connect} from 'react-redux'
 import RatingModal from '../Modals/RatingModal';
 import LoginModal from '../Modals/LoginModal';
 
+import * as ContentRatingActions from '../../Actions/contentRating'
+
 class App extends Component {
 
     constructor(props) {
@@ -11,7 +13,6 @@ class App extends Component {
 
         this.state = {
             loginModalOpen: false,
-            ratingModalOpen: false
         }
     }
 
@@ -20,18 +21,19 @@ class App extends Component {
     }
 
     setRatingModalOpen = value => {
-        this.setState({ratingModalOpen: value})
+        this.props.setRatingModalOpen(value)
     }
 
     generateContent = () => {
         let content = this.props.userSession.content
-        console.log(content)
         if (!content) { console.log("no content"); return null }
         return content.map(c => {
             return (
                 <Content
+                    key={c.title}
                     title={c.title}
                     averageRating={c.average}
+                    onClick={this.setRatingModalOpen.bind(this, true)}
                 />
             )
         })
@@ -48,20 +50,13 @@ class App extends Component {
                     Toggle Login Modal
                 </button>
 
-
-                <button
-                    onClick={this.setRatingModalOpen.bind(this, !this.state.ratingModalOpen)}
-                >
-                    Toggle Rating Modal
-                </button>
-
                 <LoginModal
                     isOpen={this.state.loginModalOpen}
                     onRequestClose={this.setLoginModalOpen.bind(this, false)}
                 />
 
                 <RatingModal
-                    isOpen={this.state.ratingModalOpen}
+                    isOpen={this.props.contentRating.ratingModalOpen}
                     onRequestClose={this.setRatingModalOpen.bind(this, false)}
                 />
 
@@ -76,7 +71,6 @@ class App extends Component {
                             (this.props.userSession.isLoggedIn)
                                 ? "Here is some content"
                                 : "Please Log in"
-                            
                         }
                     </h1>
 
@@ -96,7 +90,7 @@ class Content extends Component {
         super(props)
 
         this.state = {
-            isHovered: false
+            isHovered: false,
         }
     }
 
@@ -121,6 +115,7 @@ class Content extends Component {
                 style={this.getContentStyle()}
                 onMouseEnter={this.setIsHovered.bind(this,true)}
                 onMouseLeave={this.setIsHovered.bind(this, false)}
+                onClick={this.props.onClick}
             >
                 <h1
                     style={{
@@ -144,11 +139,13 @@ class Content extends Component {
 }
 
 const mapStateToProps = state => {
-    return {userSession: state.userSession}
+    return {userSession: state.userSession, contentRating: state.contentRating}
 }
 
 const mapDispatchToProps = dispatch => {
-    return {}
+    return {
+        setRatingModalOpen: isOpen => dispatch(ContentRatingActions.setRatingModalOpen(isOpen))
+    }
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(App)

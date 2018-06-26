@@ -2,6 +2,13 @@
 import * as request from 'superagent'
 import config from '../config'
 
+export function setRatingModalOpen (isOpen) {
+    return {
+        type: "SET_RATING_MODAL_OPEN", 
+        value: isOpen
+    }
+}
+
 export function setContentRating (contentRating) {
     return {
         type: "SET_CONTENT_RATING", 
@@ -9,9 +16,10 @@ export function setContentRating (contentRating) {
     }
 }
 
-export function setPostFailed () {
+export function setPostFailed (value) {
     return {
-        type:"SET_POST_FAILED"
+        type:"SET_POST_FAILED",
+        value
     }
 }
 
@@ -56,14 +64,19 @@ export function postUserRating (_userId, _contentId, _rating) {
             })
             .then(res => {
                 dispatch(setAwaitingResponse(false))
-                if (!res || res.response !== "success") {
-                    dispatch(setPostFailed())
+                console.log(res)
+                if (!res || res.body.response !== "success") {
+                    dispatch(setPostFailed(true))
                 } else {
                     dispatch(retrieveRating(_contentId))
                 }
+                setTimeout(function() { 
+                    dispatch(setRatingModalOpen(false))
+                    dispatch(setPostFailed(false))
+                }, 3000)
             }, err => {
                 dispatch(setAwaitingResponse(false))
-                dispatch(setPostFailed())                
+                dispatch(setPostFailed(true))                
             })
 
     }
