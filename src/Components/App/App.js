@@ -72,15 +72,13 @@ class App extends Component {
     render() {
         if (!this.props.userSession.isLoggedIn) { // display login UI
             return (
-                <div style={this.appWindowStyle}>
-                    <ReactCSSTransitionGroup
-                        transitionName="background"
-                        transitionEnterTimeout={1000}
-                        transitionLeaveTimeout={1000}
-                    >
-                        <div key="window1" style={this.appWindowStyle}>
+                <ReactCSSTransitionGroup
+                    transitionName="horizontalSlide"
+                    transitionEnterTimeout={1000}
+                    transitionLeaveTimeout={1000}
+                >
+                    <div key="window1" style={this.appWindowStyle}>
                         <Button
-                            key="btn1"
                             style={{
                                 margin:"20px"
                             }}
@@ -89,48 +87,41 @@ class App extends Component {
                         />
 
                         <LoginModal
-                            key="loginmodal"
                             isOpen={this.state.loginModalOpen}
                             onRequestClose={this.setLoginModalOpen.bind(this, false)}
                         />
-                        </div>
-                    </ReactCSSTransitionGroup>
-                </div>
+                    </div>
+                </ReactCSSTransitionGroup>
             )
 
         }
 
         if (this.props.userSession.selectedContentId != null) { // must compare to null as contentId can equal 0
             return (
-                <div style={this.appWindowStyle}>
-                    <ReactCSSTransitionGroup
-                        transitionName="background"
-                        transitionEnterTimeout={1000}
-                        transitionLeaveTimeout={1000}
-                    >
-                        <div key="window2" style={this.appWindowStyle}>
+                <ReactCSSTransitionGroup
+                    transitionName="horizontalSlide"
+                    transitionEnterTimeout={1000}
+                    transitionLeaveTimeout={1000}
+                >
+                    <div key="window2" style={this.appWindowStyle}>
                         <RatingModal
-                            key="ratemodal"
                             isOpen={this.props.contentRating.ratingModalOpen}
                             onRequestClose={this.setRatingModalOpen.bind(this, false)}
                         />
 
                         <Button
-                            key="btn2"
                             style={{margin:"20px"}}
                             onClick={this.closeContent}
                             text={"Back"}
                         />
 
                         <Button
-                            key="btn3"
                             style={{ margin:"20px 0"}}
                             onClick={this.openRatingModal}
                             text={"Open Rating Modal"}
                         />
 
                         <Header
-                            key="header"
                             style={{marginLeft:"100px"}}
                             text={
                                 this.props.userSession.content.find(e => {
@@ -138,22 +129,29 @@ class App extends Component {
                                 }).title
                             }
                         />
-                        </div>
-                    </ReactCSSTransitionGroup>
-                </div>
+
+                        <div 
+                            style={{
+                                margin:"auto",
+                                background:"black",
+                                width:"95%",
+                                height:"70vh"
+                            }}
+                        />
+                        
+                    </div>
+                </ReactCSSTransitionGroup>
             )
         }
 
         return ( // Display when user is logged in and has not selected any content to view
-            <div style={this.appWindowStyle}>
-                <ReactCSSTransitionGroup
-                    transitionName="background"
-                    transitionEnterTimeout={1000}
-                    transitionLeaveTimeout={1000}
-                >
-                    <div key="window3" style={this.appWindowStyle}>
+            <ReactCSSTransitionGroup
+                transitionName="horizontalSlide"
+                transitionEnterTimeout={1000}
+                transitionLeaveTimeout={1000}
+            >
+                <div key="window3" style={this.appWindowStyle}>
                     <Button
-                        key="btn4"
                         style={{margin:"20px"}}
                         onClick={this.props.logOut}
                         text={"Log Out"}
@@ -167,9 +165,8 @@ class App extends Component {
 
                         { this.generateContent() }
                     </div>
-                    </div>
-                </ReactCSSTransitionGroup>
-            </div>
+                </div>
+            </ReactCSSTransitionGroup>
         );
     }
 }
@@ -197,9 +194,7 @@ class Content extends Component {
                 onClick={this.props.onClick}
             >
                 <Header
-                    style={{
-                        fontSize:"38px"
-                    }}
+                    style={{ fontSize:"38px" }}
                     text={this.props.title}
                 />
                 <Paragraph

@@ -1,14 +1,14 @@
-.background-enter {
+.horizontalSlide-enter {
     transform: translate(100%);
-  }
-  .background-enter.background-enter-active {
+}
+.horizontalSlide-enter.horizontalSlide-enter-active {
     transform: translate(0%);
-    transition: transform 1000ms ease-in-out;
-  }
-  .background-leave {
+    transition: transform 600ms ease-in-out;
+}
+.horizontalSlide-leave {
     transform: translate(0%);
-  }
-  .background-leave.background-leave-active {
+}
+.horizontalSlide-leave.horizontalSlide-leave-active {
     transform: translate(-100%);
-    transition: transform 1000ms ease-in-out;
-  }
+    transition: transform 600ms ease-in-out;
+}
