@@ -78,7 +78,9 @@ class App extends Component {
                         transitionEnterTimeout={1000}
                         transitionLeaveTimeout={1000}
                     >
+                        <div key="window1" style={this.appWindowStyle}>
                         <Button
+                            key="btn1"
                             style={{
                                 margin:"20px"
                             }}
@@ -87,9 +89,11 @@ class App extends Component {
                         />
 
                         <LoginModal
+                            key="loginmodal"
                             isOpen={this.state.loginModalOpen}
                             onRequestClose={this.setLoginModalOpen.bind(this, false)}
                         />
+                        </div>
                     </ReactCSSTransitionGroup>
                 </div>
             )
@@ -104,24 +108,29 @@ class App extends Component {
                         transitionEnterTimeout={1000}
                         transitionLeaveTimeout={1000}
                     >
+                        <div key="window2" style={this.appWindowStyle}>
                         <RatingModal
+                            key="ratemodal"
                             isOpen={this.props.contentRating.ratingModalOpen}
                             onRequestClose={this.setRatingModalOpen.bind(this, false)}
                         />
 
                         <Button
+                            key="btn2"
                             style={{margin:"20px"}}
                             onClick={this.closeContent}
                             text={"Back"}
                         />
 
                         <Button
+                            key="btn3"
                             style={{ margin:"20px 0"}}
                             onClick={this.openRatingModal}
                             text={"Open Rating Modal"}
                         />
 
                         <Header
+                            key="header"
                             style={{marginLeft:"100px"}}
                             text={
                                 this.props.userSession.content.find(e => {
@@ -129,6 +138,7 @@ class App extends Component {
                                 }).title
                             }
                         />
+                        </div>
                     </ReactCSSTransitionGroup>
                 </div>
             )
@@ -141,24 +151,22 @@ class App extends Component {
                     transitionEnterTimeout={1000}
                     transitionLeaveTimeout={1000}
                 >
+                    <div key="window3" style={this.appWindowStyle}>
                     <Button
+                        key="btn4"
                         style={{margin:"20px"}}
                         onClick={this.props.logOut}
                         text={"Log Out"}
                     />
 
-                    <RatingModal
-                        isOpen={this.props.contentRating.ratingModalOpen}
-                        onRequestClose={this.setRatingModalOpen.bind(this, false)}
-                    />
-
-                    <div style={{width:"70%", margin:"0 auto"}} >
+                    <div key="div" style={{width:"70%", margin:"0 auto"}}>
                         <Header
                             style={{textAlign:"center"}}
                             text={"Here is some content"}
                         />
 
                         { this.generateContent() }
+                    </div>
                     </div>
                 </ReactCSSTransitionGroup>
             </div>
