@@ -14,13 +14,6 @@ const state = (state = defaultState, action) => {
             }
         }
 
-        // case 'SET_CONTENT_RATING': {
-        //     return {
-        //         ...state,
-        //         contentRating: action.contentRating
-        //     }
-        // }
-
         case 'SET_AWAITING_RESPONSE': {
             return {
                 ...state,

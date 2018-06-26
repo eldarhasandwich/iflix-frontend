@@ -6,7 +6,8 @@ import LoginModal from '../Modals/LoginModal';
 
 import * as ContentRatingActions from '../../Actions/contentRating'
 import * as UserSessionActions from '../../Actions/userSession'
-// import { Z_VERSION_ERROR } from 'zlib';
+import Button from '../Elements/Button';
+import Header from '../Elements/Header';
 
 class App extends Component {
 
@@ -45,6 +46,11 @@ class App extends Component {
         })
     }
 
+    openRatingModal = () => {
+        this.props.setRatingModalOpen(true)
+        this.props.setPostOutcomeNull()
+    }
+
     closeContent = () => {
         this.setSelectedContent(null)
         this.setRatingModalOpen(false)
@@ -56,13 +62,14 @@ class App extends Component {
         if (!this.props.userSession.isLoggedIn) { // display login UI
             return (
                 <div>
-                    <button
+                    <Button
+                        style={{
+                            margin:"20px"
+                        }}
                         onClick={this.setLoginModalOpen.bind(this, !this.state.loginModalOpen)}
-                    >
-                        Toggle Login Modal
-                    </button>
+                        text={"Toggle Login Modal"}
+                    />
 
-                    
                     <LoginModal
                         isOpen={this.state.loginModalOpen}
                         onRequestClose={this.setLoginModalOpen.bind(this, false)}
@@ -75,31 +82,38 @@ class App extends Component {
         if (this.props.userSession.selectedContentId != null) { // must compare to null as contentId can equal 0
             return (
                 <div>
-
-                    <button
-                        onClick={this.closeContent}
-                    >
-                        Back
-                    </button>
-
-                    <h1>
-                        {
-                            this.props.userSession.content.find(e => {
-                                return e.contentId === this.props.userSession.selectedContentId
-                            }).title
-                        }
-                    </h1>
-
                     <RatingModal
                         isOpen={this.props.contentRating.ratingModalOpen}
                         onRequestClose={this.setRatingModalOpen.bind(this, false)}
                     />
 
-                    <button
-                        onClick={this.setRatingModalOpen.bind(this, true)}
-                    >
-                        Open Rating Modal
-                    </button>
+                    <Button
+                        style={{
+                            margin:"20px"
+                        }}
+                        onClick={this.closeContent}
+                        text={"Back"}
+                    />
+
+                    <Button
+                        style={{
+                            margin:"20px 0"
+                        }}
+                        onClick={this.openRatingModal}
+                        text={"Open Rating Modal"}
+                    />
+
+                    <Header
+                        style={{
+                            marginLeft:"100px"
+                        }}
+                        text={
+                            this.props.userSession.content.find(e => {
+                                return e.contentId === this.props.userSession.selectedContentId
+                            }).title
+                        }
+                    />
+
                     
                 </div>
             )
@@ -108,11 +122,13 @@ class App extends Component {
         return ( // Display when user is logged in and has not selected any content to view
             <div>
 
-                <button
+                <Button
+                    style={{
+                        margin:"20px"
+                    }}
                     onClick={this.props.logOut}
-                >
-                    Log Out
-                </button>
+                    text={"Log Out"}
+                />
 
                 <RatingModal
                     isOpen={this.props.contentRating.ratingModalOpen}
@@ -125,7 +141,11 @@ class App extends Component {
                         margin:"0 auto"
                     }}
                 >
-                    <h1 style={{textAlign:"center"}}>Here is some content</h1>
+
+                    <Header
+                        style={{textAlign:"center"}}
+                        text={"Here is some content"}
+                    />
 
                     {
                         this.generateContent()
@@ -200,7 +220,8 @@ const mapDispatchToProps = dispatch => {
         setRatingModalOpen: isOpen => dispatch(ContentRatingActions.setRatingModalOpen(isOpen)),
         setSelectedContent: id => dispatch(UserSessionActions.setSelectedContent(id)),
         resetContentRating: () => dispatch(ContentRatingActions.setPostOutcome(null)),
-        logOut: () => dispatch(UserSessionActions.logOut())
+        logOut: () => dispatch(UserSessionActions.logOut()),
+        setPostOutcomeNull: () => dispatch(ContentRatingActions.setPostOutcome(null))
     }
 }
 

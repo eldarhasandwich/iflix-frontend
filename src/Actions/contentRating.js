@@ -11,13 +11,6 @@ export function setRatingModalOpen (isOpen) {
     }
 }
 
-// export function setContentRating (contentRating) {
-//     return {
-//         type: "SET_CONTENT_RATING", 
-//         contentRating: contentRating
-//     }
-// }
-
 export function setPostOutcome (value) {
     return {
         type:"SET_POST_OUTCOME",
@@ -66,17 +59,19 @@ export function postUserRating (_userId, _contentId, _rating) {
                 response: 5000
             })
             .then(res => {
-                dispatch(setAwaitingResponse(false))
                 if (!res || res.body.response !== "success") { // if post failed, display false outcome
+                    dispatch(setAwaitingResponse(false))
                     dispatch(setPostOutcome("fail"))
                 } else { // if successful, display true outcome
                     dispatch(retrieveRating(_contentId))
-                    dispatch(setPostOutcome("pass"))
+                    setTimeout(() => { // cheeky fake delay to let user know action has occured ;)
+                        dispatch(setAwaitingResponse(false))
+                        dispatch(setPostOutcome("pass"))
+                    }, 1000)
                 }
                 setTimeout(function() { // after 3s, close the modal
                     dispatch(setRatingModalOpen(false))
-                    dispatch(setPostOutcome(null))
-                }, 3000)
+                }, 5000)
             }, err => { 
                 dispatch(setAwaitingResponse(false))
                 dispatch(setPostOutcome("fail"))                

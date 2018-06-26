@@ -1,24 +1,21 @@
 import React, {Component} from 'react';
 import {connect} from 'react-redux'
 
+import './modal.css'
+
 class Modal extends Component {
 
     modalStyle = {
-        border: "solid 1px black",
         width: `${this.props.width}px`,
-        position: "absolute",
-        left: `calc(50% - ${(this.props.width)/2}px)`,
-        top: "60px",
-        backgroundColor: "white"
+        left: `calc(50% - ${(this.props.width)/2}px)`
     }
 
     render() {
-        if (!this.props.isOpen) {
-            return null
-        }
-
         return (
-            <div style={this.modalStyle}>
+            <div
+                className={(this.props.isOpen) ? "example-component show" : "example-component"}
+                style={this.modalStyle}
+            >
                 {this.props.children}
             </div>
         )
