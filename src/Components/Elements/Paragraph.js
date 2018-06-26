@@ -9,6 +9,7 @@ class Paragraph extends Component {
     render() {
         return (
             <p
+                hidden={this.props.hidden}
                 style={this.paragraphStyle}
             >
                 {this.props.text}

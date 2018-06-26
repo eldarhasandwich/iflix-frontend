@@ -1,5 +1,6 @@
 import React, {Component} from 'react';
 import {connect} from 'react-redux'
+import ReactCSSTransitionGroup from 'react-addons-css-transition-group'
 
 import RatingModal from '../Modals/RatingModal';
 import LoginModal from '../Modals/LoginModal';
@@ -8,6 +9,10 @@ import * as ContentRatingActions from '../../Actions/contentRating'
 import * as UserSessionActions from '../../Actions/userSession'
 import Button from '../Elements/Button';
 import Header from '../Elements/Header';
+import Paragraph from '../Elements/Paragraph';
+
+import './app.css'
+import './content.css'
 
 class App extends Component {
 
@@ -57,23 +62,35 @@ class App extends Component {
         this.props.resetContentRating()
     }
 
-    render() {
+    appWindowStyle = {
+        position:"absolute",
+        top:0,
+        width:"100%",
+        zIndex:"-1000"
+    }
 
+    render() {
         if (!this.props.userSession.isLoggedIn) { // display login UI
             return (
-                <div>
-                    <Button
-                        style={{
-                            margin:"20px"
-                        }}
-                        onClick={this.setLoginModalOpen.bind(this, !this.state.loginModalOpen)}
-                        text={"Toggle Login Modal"}
-                    />
+                <div style={this.appWindowStyle}>
+                    <ReactCSSTransitionGroup
+                        transitionName="background"
+                        transitionEnterTimeout={1000}
+                        transitionLeaveTimeout={1000}
+                    >
+                        <Button
+                            style={{
+                                margin:"20px"
+                            }}
+                            onClick={this.setLoginModalOpen.bind(this, !this.state.loginModalOpen)}
+                            text={"Toggle Login Modal"}
+                        />
 
-                    <LoginModal
-                        isOpen={this.state.loginModalOpen}
-                        onRequestClose={this.setLoginModalOpen.bind(this, false)}
-                    />
+                        <LoginModal
+                            isOpen={this.state.loginModalOpen}
+                            onRequestClose={this.setLoginModalOpen.bind(this, false)}
+                        />
+                    </ReactCSSTransitionGroup>
                 </div>
             )
 
@@ -81,77 +98,69 @@ class App extends Component {
 
         if (this.props.userSession.selectedContentId != null) { // must compare to null as contentId can equal 0
             return (
-                <div>
-                    <RatingModal
-                        isOpen={this.props.contentRating.ratingModalOpen}
-                        onRequestClose={this.setRatingModalOpen.bind(this, false)}
-                    />
+                <div style={this.appWindowStyle}>
+                    <ReactCSSTransitionGroup
+                        transitionName="background"
+                        transitionEnterTimeout={1000}
+                        transitionLeaveTimeout={1000}
+                    >
+                        <RatingModal
+                            isOpen={this.props.contentRating.ratingModalOpen}
+                            onRequestClose={this.setRatingModalOpen.bind(this, false)}
+                        />
 
-                    <Button
-                        style={{
-                            margin:"20px"
-                        }}
-                        onClick={this.closeContent}
-                        text={"Back"}
-                    />
+                        <Button
+                            style={{margin:"20px"}}
+                            onClick={this.closeContent}
+                            text={"Back"}
+                        />
 
-                    <Button
-                        style={{
-                            margin:"20px 0"
-                        }}
-                        onClick={this.openRatingModal}
-                        text={"Open Rating Modal"}
-                    />
+                        <Button
+                            style={{ margin:"20px 0"}}
+                            onClick={this.openRatingModal}
+                            text={"Open Rating Modal"}
+                        />
 
-                    <Header
-                        style={{
-                            marginLeft:"100px"
-                        }}
-                        text={
-                            this.props.userSession.content.find(e => {
-                                return e.contentId === this.props.userSession.selectedContentId
-                            }).title
-                        }
-                    />
-
-                    
+                        <Header
+                            style={{marginLeft:"100px"}}
+                            text={
+                                this.props.userSession.content.find(e => {
+                                    return e.contentId === this.props.userSession.selectedContentId
+                                }).title
+                            }
+                        />
+                    </ReactCSSTransitionGroup>
                 </div>
             )
         }
 
         return ( // Display when user is logged in and has not selected any content to view
-            <div>
-
-                <Button
-                    style={{
-                        margin:"20px"
-                    }}
-                    onClick={this.props.logOut}
-                    text={"Log Out"}
-                />
-
-                <RatingModal
-                    isOpen={this.props.contentRating.ratingModalOpen}
-                    onRequestClose={this.setRatingModalOpen.bind(this, false)}
-                />
-
-                <div
-                    style={{
-                        width:"70%",
-                        margin:"0 auto"
-                    }}
+            <div style={this.appWindowStyle}>
+                <ReactCSSTransitionGroup
+                    transitionName="background"
+                    transitionEnterTimeout={1000}
+                    transitionLeaveTimeout={1000}
                 >
-
-                    <Header
-                        style={{textAlign:"center"}}
-                        text={"Here is some content"}
+                    <Button
+                        style={{margin:"20px"}}
+                        onClick={this.props.logOut}
+                        text={"Log Out"}
                     />
 
-                    {
-                        this.generateContent()
-                    }
+                    <RatingModal
+                        isOpen={this.props.contentRating.ratingModalOpen}
+                        onRequestClose={this.setRatingModalOpen.bind(this, false)}
+                    />
 
-                </div>
+                    <div style={{width:"70%", margin:"0 auto"}} >
+                        <Header
+                            style={{textAlign:"center"}}
+                            text={"Here is some content"}
+                        />
+
+                        { this.generateContent() }
+                    </div>
+                </ReactCSSTransitionGroup>
             </div>
         );
     }
@@ -171,41 +180,29 @@ class Content extends Component {
         this.setState({isHovered: value})
     }
 
-    getContentStyle = () => { 
-        return {
-            border: "solid 1px black",
-            width: "50%",
-            margin: "0 auto",
-            marginBottom:"5px",
-            backgroundColor: "white",
-            cursor: "pointer"
-        }
-    }
-
     render() {
         return (
             <div 
-                style={this.getContentStyle()}
-                onMouseEnter={this.setIsHovered.bind(this,true)}
+                className="content-div"
+                onMouseOver={this.setIsHovered.bind(this,true)}
                 onMouseLeave={this.setIsHovered.bind(this, false)}
                 onClick={this.props.onClick}
             >
-                <h1
+                <Header
                     style={{
-                        textAlign:"center"
+                        fontSize:"38px"
                     }}
-                >
-                    {this.props.title}
-                </h1>
-                <p
+                    text={this.props.title}
+                />
+                <Paragraph
                     hidden={!this.state.isHovered}
                     style={{
                         textAlign:"right",
-                        paddingRight:"10px"
+                        paddingTop:"17px",
+                        paddingRight:"2px"
                     }}
-                >
-                    Community Rating: {this.props.averageRating.toFixed(1)}/5 stars
-                </p>
+                    text={`Community Rating: ${this.props.averageRating.toFixed(1)}/5 stars`}
+                />
             </div>
         )
     }

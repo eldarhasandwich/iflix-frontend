@@ -1,0 +1,23 @@
+
+.content-div {
+    background-color: white;
+    padding: 20px;
+    margin: auto;
+    margin-bottom: 20px;
+    height: 90px;
+    width: 50%;
+    overflow: hidden;
+
+    box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.2), 0 3px 10px 0 rgba(0, 0, 0, 0.19);
+    -webkit-transition: 0.4s;
+    -moz-transition: 0.4s;
+    -o-transition: 0.4s;
+    transition: 0.4s;
+
+  }
+  .content-div:hover {
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+    cursor: pointer;
+    
+    padding-bottom: 50px;
+  }
