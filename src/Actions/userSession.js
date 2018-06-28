@@ -51,14 +51,15 @@ export function attemptLogin (userId) {
             .get(config.api + "/login/" + userId)
             .then(res => {
                 if (res.body.response !== "success") {
+                    console.log("Failed to login")
                     dispatch(setLogin(false))
                 } else {
                     dispatch(setLogin(true, res.body.userId))
                     dispatch(retrieveContent())
                 }
             })
-            .catch(function(err) {
-
+            .catch(err => {
+                console.log("Failed to login")
             })
     }
 }
@@ -69,15 +70,14 @@ export function retrieveContent () {
         request
             .get(config.api + "/content")
             .then(res => {
-                // console.log(res.body)
                 if (!res) {
-                    ///
+                    console.log("Could not retrieve content")
                 } else {
                     dispatch(setContent(res.body.content))
                 }
             })
-            .catch(function(err) {
-                ///
+            .catch(err => {
+                console.log("Could not retrieve content")
             })
 
     }

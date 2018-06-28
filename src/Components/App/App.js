@@ -160,7 +160,11 @@ class App extends Component {
                     <div key="div" style={{width:"70%", margin:"0 auto"}}>
                         <Header
                             style={{textAlign:"center"}}
-                            text={"Here is some content"}
+                            text={
+                                (!this.props.userSession.content || this.props.userSession.content.length === 0)
+                                    ? "Content could not load, please try again later."
+                                    : "Here is some content"
+                            }
                         />
 
                         { this.generateContent() }

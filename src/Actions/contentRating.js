@@ -30,16 +30,15 @@ export function retrieveRating (contentId) {
 
         request
             .get(config.api + "/rating/" + contentId)
-            .then(function(res) {
+            .then(res => {
                 if (!res) {
-                    console.log("cant get average rating??")
-                } else {
-                    console.log(res)
-                    dispatch(UserSessionActions.updateContentAverageRating(contentId, res.body.rating))
+                    console.log("Couldn't update average rating for contentId:" + contentId)
+                    return
                 }
+                dispatch(UserSessionActions.updateContentAverageRating(contentId, res.body.rating))
             })
-            .catch(function(err) {
-                ///
+            .catch(err => {
+                console.log("Couldn't update average rating for contentId:" + contentId)
             })
 
     }
@@ -69,7 +68,7 @@ export function postUserRating (_userId, _contentId, _rating) {
                         dispatch(setPostOutcome("pass"))
                     }, 1000)
                 }
-                setTimeout(function() { // after 3s, close the modal
+                setTimeout(function() { // after 5s, close the modal
                     dispatch(setRatingModalOpen(false))
                 }, 5000)
             }, err => { 

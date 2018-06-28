@@ -43,12 +43,12 @@ class RatingModal extends Component {
 
     getRatingLabel = () => {
         switch (this.state.mouseOver) {
-            case 0: return "Give us feedback..."
             case 1: return "Poor"
             case 2: return "Okay"
             case 3: return "Average"
             case 4: return "Good"
             case 5: return "Amazing!"
+            default: return "Give us feedback..."
         }
     }
 
